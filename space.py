@@ -23,7 +23,8 @@ numberOfLines = 6
 numberOfItemsInLine = 19
 basicSize = 5
 xTargetsDistance = 60
-speed = 2
+speedX = 2
+speedY = 10
 #
 
 
@@ -60,17 +61,21 @@ def moveTargets():
     global targetsVector
     if targetsVector == "Right":
         for object in targetsObjects:
-            canvas.move(object, speed, 0)
+            canvas.move(object, speedX, 0)
     else:
         for object in targetsObjects:
-            canvas.move(object, speed, 0)
+            canvas.move(object, speedX, 0)
 
 
     #трекаем столкновение стака целей с границами для изменения вектора
     if targetsCoords[len(targetsCoords)-1][2] > width - targetStopPadding:
         targetsVector = "Left"
+        for object in targetsObjects:
+            canvas.move(object, 0, speedY)
     if targetsCoords[0][0] > 0 + targetStopPadding:
         targetsVector = "Right"
+        for object in targetsObjects:
+            canvas.move(object, 0, speedY)
     root.after(100, moveTargets)
 
 
