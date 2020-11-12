@@ -1,17 +1,20 @@
 # huy
 from tkinter import *
 root = Tk()
+width = 500
+height = 500
 
+targetStopPadding = 10
 
-marginLeft = 100
+marginLeft = 10
 marginRight = 50
 marginTop = 100
 
-targets = []
+targetsObjects = []
 targetsCoords = []
 targetsVector = "Right" #направление движения целей
 
-canvas = Canvas(width = 500, height = 500)
+canvas = Canvas(width = width, height = height)
 canvas.pack()
 
 
@@ -19,8 +22,10 @@ canvas.pack()
 numberOfLines = 6
 numberOfItemsInLine = 19
 basicSize = 5
-xTargetsDistance = basicSize
+xTargetsDistance = 60
+speed = 2
 #
+
 
 
 """f = 1
@@ -38,22 +43,42 @@ def moveTargets():
 
 
 def createTargets():
-    for line in range(3):
-        for item in range(5):
-            currentTarget = [marginLeft + 10 + xObjectDistance*item, marginRight + 10 + 50*line, marginLeft + 10 + xObjectDistance*item + 40, marginRight + 50 + 50*line]
-            currentTarget = [marginLeft + basicSize + xTargetsDistance*item, marginTop + ]
-            targets.append(canvas.create_rectangle(currentTarget))
+    for line in range(numberOfLines):
+        for item in range(numberOfItemsInLine):
+            currentTarget = [marginLeft  + xTargetsDistance*item,       marginRight + 10 + basicSize*2*line,
+                                                                                                            
+                                                                                                            marginLeft+ xTargetsDistance*item + basicSize,       marginRight + 10 + basicSize + basicSize*2*line]
+            #currentTarget = [marginLeft + basicSize + xTargetsDistance*item, marginTop + ]
+            targetsObjects.append(canvas.create_rectangle(currentTarget))
             targetsCoords.append(currentTarget)
+            
+            
 
 
 
-def moveTarget(obj, coords):
-    return
+def moveTargets():
+    global targetsVector
+    if targetsVector == "Right":
+        for object in targetsObjects:
+            canvas.move(object, speed, 0)
+    else:
+        for object in targetsObjects:
+            canvas.move(object, speed, 0)
+
+
+    #трекаем столкновение стака целей с границами для изменения вектора
+    if targetsCoords[len(targetsCoords)-1][2] > width - targetStopPadding:
+        targetsVector = "Left"
+    if targetsCoords[0][0] > 0 + targetStopPadding:
+        targetsVector = "Right"
+    root.after(100, moveTargets)
+
 
 
 
 createTargets()
 
+moveTargets()
 
 
 
