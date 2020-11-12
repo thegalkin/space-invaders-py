@@ -4,6 +4,16 @@ root = Tk()
 width = 500
 height = 500
 
+# Дима переменные
+
+ml = 100
+mt = 50
+numberOfItemsInLine = 15
+numberOFLines = 5
+cellSize = 16
+mg = 10
+li = []
+
 
 
 targetsObjects = []
@@ -40,6 +50,66 @@ def moveTargets():
         canvas.move(i, 1*f, 0)
     f += 1
     root.after(100, moveTargets)"""
+
+# Дима сетка
+for i in range(numberOFLines):
+    for j in range(numberOfItemsInLine):
+        li.append(canvas.create_rectangle(
+            ml + (cellSize+mg)*j,
+            mt + (cellSize+mg)*i,
+            ml + (cellSize+mg)*j + cellSize,
+            mt + (cellSize+mg)*i + cellSize))
+
+# Игрок
+cellToStick = canvas.coords(len(li)//2)
+playerSize = 30
+player = canvas.create_rectangle(cellToStick[0], 300, cellToStick[0]+playerSize, 320)
+
+# Бинды
+
+
+def arrowLeft(event):
+    canvas.move(player, -(cellSize + mg), 0)
+
+
+def arrowRight(event):
+    canvas.move(player, cellSize + mg, 0)
+
+
+ballList = []
+ballI = 0
+
+
+def spacebar(event):
+    global ball
+    global ballList
+    global ballI
+    playerCoords = canvas.coords(player)
+    playerCenter = (canvas.coords(player)[2] - canvas.coords(player)[0]) / 2
+    playerLeft = canvas.coords(player)[0]
+    playerTop = canvas.coords(player)[1]
+    ballList.append(
+        canvas.create_oval(playerLeft + playerCenter - 5, playerTop - 15, playerLeft + playerCenter + 5, playerTop - 5))
+    ballI += 1
+    shoot(ballI)
+
+
+def shoot(ballI):
+    global afterFunc
+    global ballList
+    print(ballList)
+    print(ballI)
+    if canvas.coords(ballList[ballI])[1] <= 0:
+        return None
+    else:
+        canvas.move(ballList[ballI], 0, -3)
+        afterFunc = root.after(10, shoot, ballI)
+
+
+root.bind("<Left>", arrowLeft)
+root.bind("<Right>", arrowRight)
+root.bind("<space>", spacebar)
+
 
 
 #moveTargets()
