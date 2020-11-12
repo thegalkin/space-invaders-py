@@ -1,30 +1,23 @@
 # huy
 from tkinter import *
+
 root = Tk()
 width = 500
 height = 500
 
-# Дима переменные
 
-ml = 100
-mt = 50
-numberOfItemsInLine = 15
-numberOFLines = 5
-cellSize = 16
-mg = 10
-li = []
-
+ballList = []
+ballI = -1
 
 
 targetsObjects = []
 targetsCoords = []
-targetsVector = "Right" #направление движения целей
+targetsVector = "Right"  # направление движения целей
 
-canvas = Canvas(width = width, height = height)
+canvas = Canvas(width=width, height=height)
 canvas.pack()
 
-
-#Параметры спавна целей
+# Параметры спавна целей
 
 basicSize = 10
 
@@ -37,126 +30,101 @@ speedY = 1.5
 targetStopPadding = 10
 marginLeft = 100
 marginTop = 50
-#
 
 
+class Space:
 
-# Игрок
-cellToStick = canvas.coords(targetsObjects[len(targetsObjects)//2])
-playerSize = 30
-player = canvas.create_rectangle(cellToStick[0], 300, cellToStick[0]+playerSize, 320)
+    def __init__(self):
+        self.player = None
 
-# Бинды
+    # Создание целей + движение
 
+    def createTargets(self):
+        for line in range(numberOfLines):
+            for item in range(numberOfItemsInLine):
+                currentTarget = [(basicSize + targetsMargin) * item, (basicSize + targetsMargin) * line + marginTop,
 
-def arrowLeft(event):
-    canvas.move(player, -(cellSize + mg), 0)
+                                 (basicSize + targetsMargin) * item + basicSize,
+                                 (basicSize + targetsMargin) * line + basicSize + marginTop]
+                targetsObjects.append(canvas.create_rectangle(currentTarget))
+                targetsCoords.append(currentTarget)
 
+        # Игрок
+        cellToStick = canvas.coords(len(targetsObjects) // 2)
+        # print(targetsObjects)
+        playerSize = 30
+        self.player = canvas.create_rectangle(cellToStick[0], 300, cellToStick[0] + playerSize, 320)
 
-def arrowRight(event):
-    canvas.move(player, cellSize + mg, 0)
+    def moveTargets(self):
+        global targetsVector
+        if targetsVector == "Right":
 
+            for i, object in enumerate(targetsObjects):
+                canvas.move(object, speedX, 0)
+                targetsCoords[i] = canvas.coords(object)
+        if targetsVector == "Left":
+            for i, object in enumerate(targetsObjects):
+                canvas.move(object, -speedX, 0)
+                targetsCoords[i] = canvas.coords(object)
 
-ballList = []
-ballI = 0
+        # трекаем столкновение стака целей с границами для изменения вектора
+        if targetsCoords[len(targetsCoords) - 1][2] > width - 2:
+            targetsVector = "Left"
+            for i, object in enumerate(targetsObjects):
+                canvas.move(object, 0, speedY)
+                targetsCoords[i] = canvas.coords(object)
+            print("Vector changed to Left")
+        if targetsCoords[0][0] < 2:
+            targetsVector = "Right"
+            for i, object in enumerate(targetsObjects):
+                canvas.move(object, 0, speedY)
+                targetsCoords[i] = canvas.coords(object)
+            print("Vector changed to Right")
+        root.after(10, self.moveTargets)
 
+    # Бинды + выстрел
 
-def spacebar(event):
-    global ball
-    global ballList
-    global ballI
-    playerCoords = canvas.coords(player)
-    playerCenter = (canvas.coords(player)[2] - canvas.coords(player)[0]) / 2
-    playerLeft = canvas.coords(player)[0]
-    playerTop = canvas.coords(player)[1]
-    ballList.append(
-        canvas.create_oval(playerLeft + playerCenter - 5, playerTop - 15, playerLeft + playerCenter + 5, playerTop - 5))
-    ballI += 1
-    shoot(ballI)
+    def spacebar(self, event):
+        global ball
+        global ballList
+        global ballI
+        playerCoords = canvas.coords(self.player)
+        playerCenter = (canvas.coords(self.player)[2] - canvas.coords(self.player)[0]) / 2
+        playerLeft = canvas.coords(self.player)[0]
+        playerTop = canvas.coords(self.player)[1]
+        ball = canvas.create_oval(playerLeft + playerCenter - 5, playerTop - 15, playerLeft + playerCenter + 5,
+                                  playerTop - 5)
+        ballList.append(ball)
+        ballI += 1
+        self.shoot(ballI)
 
+    def shoot(self, ballI):
+        global afterFunc
+        global ballList
 
-def shoot(ballI):
-    global afterFunc
-    global ballList
-    print(ballList)
-    print(ballI)
-    if canvas.coords(ballList[ballI])[1] <= 0:
-        return None
-    else:
-        canvas.move(ballList[ballI], 0, -3)
-        afterFunc = root.after(10, shoot, ballI)
+        if canvas.coords(ballList[ballI])[1] <= 0:
+            return None
+        else:
+            canvas.move(ballList[ballI], 0, -3)
+            afterFunc = root.after(10, self.shoot, ballI)
 
+    def arrowLeft(self, event):
+        canvas.move(self.player, -(basicSize + targetsMargin), 0)
 
-root.bind("<Left>", arrowLeft)
-root.bind("<Right>", arrowRight)
-root.bind("<space>", spacebar)
-
-
-
-#moveTargets()
-
-
-def createTargets():
-    for line in range(numberOfLines):
-        for item in range(numberOfItemsInLine):
-            currentTarget = [(basicSize + targetsMargin)*item,       (basicSize + targetsMargin)*line+marginTop,
-                                                                                                            
-                                                                                    (basicSize + targetsMargin)*item + basicSize,       (basicSize + targetsMargin)*line + basicSize+marginTop]
-            #currentTarget = [marginLeft + basicSize + xTargetsDistance*item, marginTop + ]
-            targetsObjects.append(canvas.create_rectangle(currentTarget))
-            targetsCoords.append(currentTarget)
-            
-            
-
-
-
-def moveTargets():
-    global targetsVector
-    if targetsVector == "Right":
-        
-        for i, object in enumerate(targetsObjects):
-            canvas.move(object, speedX, 0)
-            targetsCoords[i] = canvas.coords(object)
-    if targetsVector == "Left":
-        for i, object in enumerate(targetsObjects):
-            canvas.move(object, -speedX, 0)
-            targetsCoords[i] = canvas.coords(object)
-
-
-    #трекаем столкновение стака целей с границами для изменения вектора
-    if targetsCoords[len(targetsCoords)-1][2] > width-2:
-        targetsVector = "Left"
-        for i, object in enumerate(targetsObjects):
-            canvas.move(object, 0, speedY)
-            targetsCoords[i] = canvas.coords(object)
-        print("Vector changed to Left")
-    if targetsCoords[0][0] < 2 :
-        targetsVector = "Right"
-        for i, object in enumerate(targetsObjects):
-            canvas.move(object, 0, speedY)
-            targetsCoords[i] = canvas.coords(object)
-        print("Vector changed to Right")
-    root.after(10, moveTargets)
+    def arrowRight(self, event):
+        canvas.move(self.player, basicSize + targetsMargin, 0)
 
 
+s = Space()
 
+root.bind("<Left>", s.arrowLeft)
+root.bind("<Right>", s.arrowRight)
+root.bind("<space>", s.spacebar)
 
-createTargets()
+s.createTargets()
 
-moveTargets()
-
-
-
-
-
-
-
+s.moveTargets()
 
 canvas.mainloop()
 
-
 # In[ ]:
-
-
-
-
