@@ -48,7 +48,7 @@ def createTargets():
         for item in range(numberOfItemsInLine):
             currentTarget = [marginLeft  + xTargetsDistance*item,       marginRight + 10 + basicSize*2*line,
                                                                                                             
-                                                                                                            marginLeft+ xTargetsDistance*item + basicSize,       marginRight + 10 + basicSize + basicSize*2*line]
+                                                                                        marginLeft+ xTargetsDistance*item + basicSize,       marginRight + 10 + basicSize + basicSize*2*line]
             #currentTarget = [marginLeft + basicSize + xTargetsDistance*item, marginTop + ]
             targetsObjects.append(canvas.create_rectangle(currentTarget))
             targetsCoords.append(currentTarget)
@@ -83,7 +83,7 @@ def moveTargets():
 
 createTargets()
 
-moveTargets()
+#moveTargets()
 
 
 
