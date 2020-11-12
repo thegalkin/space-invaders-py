@@ -41,27 +41,8 @@ marginTop = 50
 
 
 
-"""f = 1
-
-
-def moveTargets():
-    global f
-    for i in targets:
-        canvas.move(i, 1*f, 0)
-    f += 1
-    root.after(100, moveTargets)"""
-
-# Дима сетка
-for i in range(numberOFLines):
-    for j in range(numberOfItemsInLine):
-        li.append(canvas.create_rectangle(
-            ml + (cellSize+mg)*j,
-            mt + (cellSize+mg)*i,
-            ml + (cellSize+mg)*j + cellSize,
-            mt + (cellSize+mg)*i + cellSize))
-
 # Игрок
-cellToStick = canvas.coords(len(li)//2)
+cellToStick = canvas.coords(targetsObjects[len(targetsObjects)//2])
 playerSize = 30
 player = canvas.create_rectangle(cellToStick[0], 300, cellToStick[0]+playerSize, 320)
 
@@ -143,7 +124,7 @@ def moveTargets():
 
 
     #трекаем столкновение стака целей с границами для изменения вектора
-    if targetsCoords[len(targetsCoords)-1][2] > width - targetStopPadding:
+    if targetsCoords[len(targetsCoords)-1][2] > width-2:
         targetsVector = "Left"
         for i, object in enumerate(targetsObjects):
             canvas.move(object, 0, speedY)
