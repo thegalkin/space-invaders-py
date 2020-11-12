@@ -1,5 +1,6 @@
-# huy
 from tkinter import *
+from PIL import Image, ImageTk
+
 
 root = Tk()
 width = 500
@@ -92,8 +93,10 @@ class Space:
         playerCenter = (canvas.coords(self.player)[2] - canvas.coords(self.player)[0]) / 2
         playerLeft = canvas.coords(self.player)[0]
         playerTop = canvas.coords(self.player)[1]
+        
         ball = canvas.create_oval(playerLeft + playerCenter - 5, playerTop - 15, playerLeft + playerCenter + 5,
                                   playerTop - 5)
+        
         ballList.append(ball)
         ballI += 1
         self.shoot(ballI)
