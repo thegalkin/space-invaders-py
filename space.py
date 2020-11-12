@@ -3,37 +3,66 @@ from tkinter import *
 root = Tk()
 
 
-mgl = 100
-mgt = 50
+marginLeft = 100
+marginRight = 50
+marginTop = 100
 
-li = []
+targets = []
+targetsCoords = []
+targetsVector = "Right" #направление движения целей
 
-c = Canvas(width = 500, height = 500)
-c.pack()
-
-
-for i in range(3):
-    for j in range(5):
-        li.append(c.create_rectangle(mgl + 10 + 60*j, mgt + 10 + 50*i, mgl + 10 + 60*j + 40, mgt + 50 + 50*i))
+canvas = Canvas(width = 500, height = 500)
+canvas.pack()
 
 
-f = 1
+#Параметры спавна целей
+numberOfLines = 6
+numberOfItemsInLine = 19
+basicSize = 5
+xTargetsDistance = basicSize
+#
 
 
-def m():
+"""f = 1
+
+
+def moveTargets():
     global f
-    for i in li:
-        c.move(i, 1*f, 0)
+    for i in targets:
+        canvas.move(i, 1*f, 0)
     f += 1
-    root.after(100, m)
+    root.after(100, moveTargets)"""
 
 
-m()
-def():
-    print('hello world huy')
+#moveTargets()
 
 
-c.mainloop()
+def createTargets():
+    for line in range(3):
+        for item in range(5):
+            currentTarget = [marginLeft + 10 + xObjectDistance*item, marginRight + 10 + 50*line, marginLeft + 10 + xObjectDistance*item + 40, marginRight + 50 + 50*line]
+            currentTarget = [marginLeft + basicSize + xTargetsDistance*item, marginTop + ]
+            targets.append(canvas.create_rectangle(currentTarget))
+            targetsCoords.append(currentTarget)
+
+
+
+def moveTarget(obj, coords):
+    return
+
+
+
+createTargets()
+
+
+
+
+
+
+
+
+
+canvas.mainloop()
 
 
 # In[ ]:
