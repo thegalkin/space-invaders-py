@@ -102,8 +102,13 @@ class Space:
         global afterFunc
         global ballList
         
-        for item in targetsCoords:
-            if canvas.find_overlapping
+        for i, item in enumerate(targetsCoords):
+            if len(canvas.find_overlapping(item[0], item[1], item[2], item[3])) > 1:
+                print(canvas.find_overlapping(item[0], item[1], item[2], item[3]))
+                canvas.move(ballList[ballI], 
+                del targetsObjects[i]
+                del targetsCoords[i]
+                return
 
         if canvas.coords(ballList[ballI])[1] <= 0:
             return None
@@ -123,6 +128,10 @@ s = Space()
 root.bind("<Left>", s.arrowLeft)
 root.bind("<Right>", s.arrowRight)
 root.bind("<space>", s.spacebar)
+root.bind("a", s.arrowLeft)
+root.bind("d", s.arrowRight)
+root.bind("<space>", s.spacebar)
+
 
 s.createTargets()
 
