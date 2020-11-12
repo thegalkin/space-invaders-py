@@ -22,8 +22,8 @@ numberOfLines = 6
 numberOfItemsInLine = 19
 
 targetsMargin = basicSize
-speedX = 2
-speedY = 1
+speedX = 0.5
+speedY = 1.5
 targetStopPadding = 10
 marginLeft = 100
 marginTop = 50
@@ -62,23 +62,30 @@ def createTargets():
 def moveTargets():
     global targetsVector
     if targetsVector == "Right":
-        for object in targetsObjects:
+        
+        for i, object in enumerate(targetsObjects):
             canvas.move(object, speedX, 0)
-    else:
-        for object in targetsObjects:
-            canvas.move(object, speedX, 0)
+            targetsCoords[i] = canvas.coords(object)
+    if targetsVector == "Left":
+        for i, object in enumerate(targetsObjects):
+            canvas.move(object, -speedX, 0)
+            targetsCoords[i] = canvas.coords(object)
 
 
     #трекаем столкновение стака целей с границами для изменения вектора
     if targetsCoords[len(targetsCoords)-1][2] > width - targetStopPadding:
         targetsVector = "Left"
-        for object in targetsObjects:
+        for i, object in enumerate(targetsObjects):
             canvas.move(object, 0, speedY)
-    if targetsCoords[0][0] > 0 + targetStopPadding:
+            targetsCoords[i] = canvas.coords(object)
+        print("Vector changed to Left")
+    if targetsCoords[0][0] < 2 :
         targetsVector = "Right"
-        for object in targetsObjects:
+        for i, object in enumerate(targetsObjects):
             canvas.move(object, 0, speedY)
-    root.after(100, moveTargets)
+            targetsCoords[i] = canvas.coords(object)
+        print("Vector changed to Right")
+    root.after(10, moveTargets)
 
 
 
