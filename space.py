@@ -42,7 +42,7 @@ marginTop = 50
 
 
 # Игрок
-cellToStick = canvas.coords(targetsObjects[len(targetsObjects)//2])
+cellToStick = canvas.coords(len(targetsObjects)//2)
 playerSize = 30
 player = canvas.create_rectangle(cellToStick[0], 300, cellToStick[0]+playerSize, 320)
 
