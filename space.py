@@ -29,7 +29,8 @@ def m():
 
 
 m()
-
+def():
+    print('hello world huy')
 
 
 c.mainloop()
