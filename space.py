@@ -105,10 +105,10 @@ class Space:
         for i, item in enumerate(targetsCoords):
             if len(canvas.find_overlapping(item[0], item[1], item[2], item[3])) > 1:
                 print(canvas.find_overlapping(item[0], item[1], item[2], item[3]))
-                canvas.move(ballList[ballI], 
-                del targetsObjects[i]
-                del targetsCoords[i]
-                return
+                canvas.move(ballList[ballI], -10000, -10000)
+                canvas.move(targetsObjects[i], -1000, -100)
+                canvas.move(targetsCoords[i], -1000, -1000)
+                return None
 
         if canvas.coords(ballList[ballI])[1] <= 0:
             return None
