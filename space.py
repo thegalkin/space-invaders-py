@@ -4,11 +4,7 @@ root = Tk()
 width = 500
 height = 500
 
-targetStopPadding = 10
 
-marginLeft = 10
-marginRight = 50
-marginTop = 100
 
 targetsObjects = []
 targetsCoords = []
@@ -19,12 +15,18 @@ canvas.pack()
 
 
 #Параметры спавна целей
+
+basicSize = 10
+
 numberOfLines = 6
 numberOfItemsInLine = 19
-basicSize = 5
-xTargetsDistance = 60
+
+targetsMargin = basicSize
 speedX = 2
-speedY = 10
+speedY = 1
+targetStopPadding = 10
+marginLeft = 100
+marginTop = 50
 #
 
 
@@ -46,9 +48,9 @@ def moveTargets():
 def createTargets():
     for line in range(numberOfLines):
         for item in range(numberOfItemsInLine):
-            currentTarget = [marginLeft  + xTargetsDistance*item,       marginRight + 10 + basicSize*2*line,
+            currentTarget = [(basicSize + targetsMargin)*item,       (basicSize + targetsMargin)*line+marginTop,
                                                                                                             
-                                                                                        marginLeft+ xTargetsDistance*item + basicSize,       marginRight + 10 + basicSize + basicSize*2*line]
+                                                                                    (basicSize + targetsMargin)*item + basicSize,       (basicSize + targetsMargin)*line + basicSize+marginTop]
             #currentTarget = [marginLeft + basicSize + xTargetsDistance*item, marginTop + ]
             targetsObjects.append(canvas.create_rectangle(currentTarget))
             targetsCoords.append(currentTarget)
@@ -83,7 +85,7 @@ def moveTargets():
 
 createTargets()
 
-#moveTargets()
+moveTargets()
 
 
 
