@@ -53,7 +53,6 @@ class Space:
 
         # Игрок
         cellToStick = canvas.coords(len(targetsObjects) // 2)
-        # print(targetsObjects)
         playerSize = 30
         self.player = canvas.create_rectangle(cellToStick[0], 300, cellToStick[0] + playerSize, 320)
 
@@ -107,8 +106,7 @@ class Space:
         endsOfLines = [numberOfItemsInLine * i for i in range(1, numberOfLines + 1)][::-1]
 
         for i in endsOfLines:
-
-            if (canvas.coords(ballList[ballI])[1] <= canvas.coords(targetsObjects[i - 1])[3]):
+            if canvas.coords(ballList[ballI])[1] <= canvas.coords(targetsObjects[i - 1])[3]:
                 tempCoords = canvas.coords(ballList[ballI])
                 tempTarget = canvas.find_overlapping(tempCoords[0],
                                                      tempCoords[1],
