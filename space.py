@@ -101,6 +101,9 @@ class Space:
     def shoot(self, ballI):
         global afterFunc
         global ballList
+        
+        for item in targetsCoords:
+            if canvas.find_overlapping
 
         if canvas.coords(ballList[ballI])[1] <= 0:
             return None
