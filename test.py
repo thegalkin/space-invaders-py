@@ -1,6 +1,6 @@
 
 from tkinter import *
-from PIL import Image, ImageTk
+
 
 
 root = Tk()
@@ -10,9 +10,14 @@ height = 500
 canvas = Canvas(width=width, height=height)
 canvas.pack()
 
-img = ImageTk.PhotoImage(Image.open("oleg.png"))
-img = ImageTk.PhotoImage(img)
-canvas.create_image(img.size[0],img.size[1], image=img)
+
+print(PhotoImage(file="coleg.png").width())
+olegPhoto = PhotoImage(file="coleg.png")
+
+olegImage = canvas.create_image(0,0, anchor='nw', image=olegPhoto)
+
+for i in range(100):
+    canvas.move(olegImage, 1, 1)
 
 
 
