@@ -1,14 +1,12 @@
-# huy
+import random
 from tkinter import *
 
 root = Tk()
 width = 500
 height = 500
 
-
 ballList = []
 ballI = -1
-
 
 targetsObjects = []
 targetsCoords = []
@@ -32,6 +30,10 @@ marginLeft = 100
 marginTop = 50
 
 
+def randomColor():
+    return "#%06x" % random.randint(0, 0xFFFFFF)
+
+
 class Space:
 
     def __init__(self):
@@ -46,7 +48,7 @@ class Space:
 
                                  (basicSize + targetsMargin) * item + basicSize,
                                  (basicSize + targetsMargin) * line + basicSize + marginTop]
-                targetsObjects.append(canvas.create_rectangle(currentTarget))
+                targetsObjects.append(canvas.create_rectangle(currentTarget, fill=randomColor(), tags="cell"))
                 targetsCoords.append(currentTarget)
 
         # Игрок
@@ -73,13 +75,13 @@ class Space:
             for i, object in enumerate(targetsObjects):
                 canvas.move(object, 0, speedY)
                 targetsCoords[i] = canvas.coords(object)
-            print("Vector changed to Left")
+        #             print("Vector changed to Left")
         if targetsCoords[0][0] < 2:
             targetsVector = "Right"
             for i, object in enumerate(targetsObjects):
                 canvas.move(object, 0, speedY)
                 targetsCoords[i] = canvas.coords(object)
-            print("Vector changed to Right")
+        #             print("Vector changed to Right")
         root.after(10, self.moveTargets)
 
     # Бинды + выстрел
@@ -92,8 +94,8 @@ class Space:
         playerCenter = (canvas.coords(self.player)[2] - canvas.coords(self.player)[0]) / 2
         playerLeft = canvas.coords(self.player)[0]
         playerTop = canvas.coords(self.player)[1]
-        ball = canvas.create_oval(playerLeft + playerCenter - 5, playerTop - 15, playerLeft + playerCenter + 5,
-                                  playerTop - 5)
+        ball = canvas.create_rectangle(playerLeft + playerCenter - 5, playerTop - 15, playerLeft + playerCenter + 5,
+                                       playerTop - 5)
         ballList.append(ball)
         ballI += 1
         self.shoot(ballI)
@@ -101,16 +103,25 @@ class Space:
     def shoot(self, ballI):
         global afterFunc
         global ballList
-        
-        for i, item in enumerate(targetsCoords):
-            if len(canvas.find_overlapping(item[0], item[1], item[2], item[3])) > 1:
-                print(canvas.find_overlapping(item[0], item[1], item[2], item[3]))
-                canvas.move(ballList[ballI], -10000, -10000)
-                canvas.move(targetsObjects[i], -1000, -100)
-                canvas.move(targetsCoords[i], -1000, -1000)
-                return None
+
+        endsOfLines = [numberOfItemsInLine * i for i in range(1, numberOfLines + 1)][::-1]
+
+        for i in endsOfLines:
+
+            if (canvas.coords(ballList[ballI])[1] <= canvas.coords(targetsObjects[i - 1])[3]):
+                tempCoords = canvas.coords(ballList[ballI])
+                tempTarget = canvas.find_overlapping(tempCoords[0],
+                                                     tempCoords[1],
+                                                     tempCoords[2],
+                                                     tempCoords[3])
+                if canvas.itemcget(tempTarget[0], "outline") == "black" and canvas.itemcget(tempTarget[0],
+                                                                                            "tags") == "cell":
+                    canvas.itemconfig(tempTarget[0], fill="white", outline="")
+                    canvas.delete(ballList[ballI])
+                    return None
 
         if canvas.coords(ballList[ballI])[1] <= 0:
+            canvas.delete(ballList[ballI])
             return None
         else:
             canvas.move(ballList[ballI], 0, -3)
@@ -127,16 +138,13 @@ s = Space()
 
 root.bind("<Left>", s.arrowLeft)
 root.bind("<Right>", s.arrowRight)
-root.bind("<space>", s.spacebar)
+root.bind("<KeyRelease-space>", s.spacebar)
 root.bind("a", s.arrowLeft)
 root.bind("d", s.arrowRight)
-root.bind("<space>", s.spacebar)
-
 
 s.createTargets()
 
 s.moveTargets()
 
-canvas.mainloop()
 
-# In[ ]:
+canvas.mainloop()
