@@ -37,10 +37,12 @@ def deleteTwices(l):
 
 def save(event):
     print("saving")
-    fileName = input("Enter File Name")
+    fileName = input("Enter File Name: ")
     with open("{}.txt".format(fileName), "w+") as mapFile:
         for line in targetsCoords:
-            mapFile.write(line)
+            strLine = ','.join(str(e) for e in line)
+            strLine = "[" + strLine + "]"
+            mapFile.write(strLine)
 
 for item in range(50):
     for line in range(250):

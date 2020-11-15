@@ -1,4 +1,4 @@
-import random
+from random import randint
 from tkinter import *
 
 root = Tk()
@@ -31,7 +31,7 @@ marginTop = 50
 
 
 def randomColor():
-    return "#%06x" % random.randint(0, 0xFFFFFF)
+    return "#%06x" % randint(0, 0xFFFFFF)
 
 
 class Space:
@@ -83,6 +83,13 @@ class Space:
         #             print("Vector changed to Right")
         root.after(10, self.moveTargets)
 
+    def endGame(self, win):
+        if not win:
+            return
+        else:
+            return
+
+
     # Бинды + выстрел
 
     def spacebar(self, event):
@@ -116,6 +123,8 @@ class Space:
                                                                                             "tags") == "cell":
                     canvas.itemconfig(tempTarget[0], fill="white", outline="")
                     canvas.delete(ballList[ballI])
+                    if len(ballList) == 0:
+                        self.endGame(True)
                     return None
 
         if canvas.coords(ballList[ballI])[1] <= 0:
