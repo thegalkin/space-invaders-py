@@ -28,6 +28,18 @@ layout = []
 timePrev = time()
 
 
+
+
+#Инструкция к редактору карт
+#Рисуем ЛКМ
+#Удаляем ПКМ
+#Для сохранения жмем s
+#Вводим в консоли название карты
+#Вставляем карту в код игры
+#Profit
+
+
+
 def deleteTwices(l):
     n = []
     for i in l:
@@ -38,11 +50,10 @@ def deleteTwices(l):
 def save(event):
     print("saving")
     fileName = input("Enter File Name: ")
-    with open("{}.txt".format(fileName), "w+") as mapFile:
+    with open("{}.map".format(fileName), "w+") as mapFile:
         for line in targetsCoords:
             strLine = ','.join(str(e) for e in line)
-            strLine = "[" + strLine + "]"
-            mapFile.write(strLine)
+            mapFile.write(strLine + "\n")
 
 for item in range(50):
     for line in range(250):
@@ -58,9 +69,6 @@ def randomColor():
 def boxCreation(event):
     global targetsCoords
     global targetsObjects
-    
-
-    currentTarget = [event.x-basicSize, event.y-basicSize,event.x+basicSize, event.y+basicSize]
 
     for item in layout:
 
