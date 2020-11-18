@@ -137,7 +137,7 @@ class Space:
 
         else:
             # self.drawMapFromFil e ("youWin")
-            self.drawMapFromFile("omg")
+            self.drawMapFromFile("youWin.map")
 
     # Бинды + выстрел
     def spacebar(self, event):
