@@ -60,7 +60,6 @@ class Space:
 
     # Рисование целей из своей карты
     def drawMapFromFile(self, mapName):
-        print("Drawing file")
         global gameFinished
         global targetsCoords
         global targetsObjects
@@ -100,7 +99,10 @@ class Space:
 
     #Движение целей
     def moveTargets(self):
+        global gameFinished
         global targetsVector
+        if gameFinished:
+            return
         if targetsVector == "Right":
 
             for i, object in enumerate(targetsObjects):
@@ -117,13 +119,13 @@ class Space:
             for i, object in enumerate(targetsObjects):
                 canvas.move(object, 0, speedY)
                 targetsCoords[i] = canvas.coords(object)
-        #             print("Vector changed to Left")
+
         if targetsCoords[0][0] < 2:
             targetsVector = "Right"
             for i, object in enumerate(targetsObjects):
                 canvas.move(object, 0, speedY)
                 targetsCoords[i] = canvas.coords(object)
-        #             print("Vector changed to Right")
+
 
         # проверяем проигрыш
         if deletedTargets != len(targetsObjects) and targetsCoords[len(targetsCoords)-1][3] >= canvas.coords(self.player)[1]:
@@ -134,7 +136,6 @@ class Space:
 
     #Старт конца игры
     def endGame(self, win):                                             #Просто развилка концовки
-        print("Doing Endgame")
         global gameFinished
         gameFinished = True
         if not win:
@@ -149,6 +150,7 @@ class Space:
         global ball
         global ballList
         global ballI
+        global gameFinished
         if gameFinished:
             return
         playerCoords = canvas.coords(self.player)
@@ -168,10 +170,12 @@ class Space:
         global afterFunc
         global ballList
         global deletedTargets
-
+        global gameFinished
+        if gameFinished:
+            return
         endsOfLines = [numberOfItemsInLine *
                        i for i in range(1, numberOfLines + 1)][::-1]
-
+        
         for i in endsOfLines:
             if canvas.coords(ballList[ballI])[1] <= canvas.coords(targetsObjects[i - 1])[3]:
                 tempCoords = canvas.coords(ballList[ballI])
