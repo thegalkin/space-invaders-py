@@ -1,4 +1,3 @@
-
 from tkinter import *
 from random import randint
 from time import time
@@ -28,16 +27,13 @@ layout = []
 timePrev = time()
 
 
-
-
-#Инструкция к редактору карт
-#Рисуем ЛКМ
-#Удаляем ПКМ
-#Для сохранения жмем s
-#Вводим в консоли название карты
-#Вставляем карту в код игры
-#Profit
-
+# Инструкция к редактору карт
+# Рисуем ЛКМ
+# Удаляем ПКМ
+# Для сохранения жмем s
+# Вводим в консоли название карты
+# Вставляем карту в код игры
+# Profit
 
 
 def deleteTwices(l):
@@ -47,6 +43,7 @@ def deleteTwices(l):
             n.append(i)
     return n
 
+
 def save(event):
     print("saving")
     fileName = input("Enter File Name: ")
@@ -55,17 +52,21 @@ def save(event):
             strLine = ','.join(str(e) for e in line)
             mapFile.write(strLine + "\n")
 
+
 for item in range(50):
     for line in range(250):
         currentTarget = [(basicSize + targetsMargin) * item, (basicSize + targetsMargin) * line + marginTop,
 
-                (basicSize + targetsMargin) * item + basicSize,
-                (basicSize + targetsMargin) * line + basicSize + marginTop]
-        
+                         (basicSize + targetsMargin) * item + basicSize,
+                         (basicSize + targetsMargin) * line + basicSize + marginTop]
+
         layout.append(currentTarget)
+
 
 def randomColor():
     return "#%06x" % randint(0, 0xFFFFFF)
+
+
 def boxCreation(event):
     global targetsCoords
     global targetsObjects
@@ -74,41 +75,39 @@ def boxCreation(event):
 
         if item[0] < event.x < item[2] and item[1] < event.y < item[3]:
             if not (item in targetsCoords):
-                
                 targetsObjects.append(canvas.create_rectangle(item, fill="#eae100", tags="cell", outline=""))
             targetsCoords.append(item)
             print(len(targetsCoords))
             targetsCoords = deleteTwices(targetsCoords)
             print(len(targetsCoords))
-            #print(targetsCoords)    
+            # print(targetsCoords)
+
 
 def boxDeletion(event):
     global targetsCoords
     global targetsObjects
-    currentTarget = [event.x-basicSize, event.y-basicSize,event.x+basicSize, event.y+basicSize]
+    currentTarget = [event.x - basicSize, event.y - basicSize, event.x + basicSize, event.y + basicSize]
 
-    for item in layout :
+    for item in layout:
         try:
             if item[0] < event.x < item[2] and item[1] < event.y < item[3] and item in targetsCoords:
-                
                 print("trying to delete")
-                
+
                 canvas.delete(targetsObjects[targetsCoords.index(item)])
                 del targetsObjects[targetsCoords.index(item)]
                 print(targetsObjects)
                 del targetsCoords[targetsCoords.index(item)]
-                
-                
+
         except ValueError:
-            
-            print(targetsCoords)    
+
+            print(targetsCoords)
             return
+
 
 canvas.bind('<Button-1>', boxCreation)
 canvas.bind('<B1-Motion>', boxCreation)
 canvas.bind('<Button-2>', boxDeletion)
 canvas.bind('<B2-Motion>', boxDeletion)
 root.bind('s', save)
-
 
 canvas.mainloop()

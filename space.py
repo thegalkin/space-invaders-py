@@ -48,15 +48,13 @@ class Space:
         root.bind("<KeyRelease-s>", self.arrowRight)
         root.bind("<KeyRelease-a>", self.arrowLeft)
 
-
-    #Удаление повторений в таблице координат целей - вспомогательная функция
-    def deleteTwices(l):
+    # Удаление повторений в таблице координат целей - вспомогательная функция
+    def deleteTwices(self, l):
         n = []
         for i in l:
             if i not in n:
                 n.append(i)
         return n
-
 
     # Рисование целей из своей карты
     def drawMapFromFile(self, mapName):
@@ -64,21 +62,20 @@ class Space:
         global targetsCoords
         global targetsObjects
         tempObjects = []  
-        targetsCoords = []                                                  #Чистим таблицу целей и их объектов
+        targetsCoords = []                                                  # Чистим таблицу целей и их объектов
         for item in targetsObjects:                                         
             canvas.delete(item)
         
         with open("{}.map".format(mapName), 'r') as mapFile:
             for target in mapFile:
-                tempLine = list(target.split(","))                          #Читаем файл карты и вычленяем данные
+                tempLine = list(target.split(","))                          # Читаем файл карты и вычленяем данные
                 for i in range(len(tempLine)):
-                    tempLine[i] = int(tempLine[i])                          #Создаем по данным объекты и их записи
+                    tempLine[i] = int(tempLine[i])                          # Создаем по данным объекты и их записи
                     targetsObjects.append(canvas.create_rectangle(
                         tempLine, fill="#eae100", tags="cell", outline=""))
                     targetsCoords.append(target)
 
-
-    #Создание целей
+    # Создание целей
     def createTargets(self):
         for line in range(numberOfLines):
             for item in range(numberOfItemsInLine):
@@ -95,9 +92,8 @@ class Space:
         playerSize = 30
         self.player = canvas.create_rectangle(
             cellToStick[0], 300, cellToStick[0] + playerSize, 320, fill="gray")
-    
 
-    #Движение целей
+    # Движение целей
     def moveTargets(self):
         global gameFinished
         global targetsVector
@@ -126,24 +122,22 @@ class Space:
                 canvas.move(object, 0, speedY)
                 targetsCoords[i] = canvas.coords(object)
 
-
         # проверяем проигрыш
         if deletedTargets != len(targetsObjects) and targetsCoords[len(targetsCoords)-1][3] >= canvas.coords(self.player)[1]:
-            self.endGame(False)                                         #Если цели достигли игрока и он не убил их - проигрыш
-        if not gameFinished:                                            #Если не проиграли - продолжаем движение целей
+            self.endGame(False)                               # Если цели достигли игрока и он не убил их - проигрыш
+        if not gameFinished:                                  # Если не проиграли - продолжаем движение целей
             root.after(10, self.moveTargets)
-    
 
-    #Старт конца игры
-    def endGame(self, win):                                             #Просто развилка концовки
+    # Старт конца игры
+    def endGame(self, win):                                             # Просто развилка концовки
         global gameFinished
         gameFinished = True
         if not win:
             self.drawMapFromFile("youLoose")
 
         else:
-            self.drawMapFromFile("youWin")
-
+            # self.drawMapFromFil e ("youWin")
+            self.drawMapFromFile("omg")
 
     # Бинды + выстрел
     def spacebar(self, event):
@@ -163,7 +157,6 @@ class Space:
         ballList.append(ball)
         ballI += 1
         self.shoot(ballI)
-
 
     # Стрельба
     def shoot(self, ballI):
@@ -190,7 +183,7 @@ class Space:
                     deletedTargets += 1
                     canvas.delete(ballList[ballI])
 
-                    if deletedTargets == len(targetsObjects):                   #Проверка на выигрыш - если уничтожены все цели
+                    if deletedTargets == len(targetsObjects):          # Проверка на выигрыш - если уничтожены все цели
                         self.endGame(True)
                     return None
 
@@ -201,12 +194,10 @@ class Space:
             canvas.move(ballList[ballI], 0, -3)
             afterFunc = root.after(10, self.shoot, ballI)
 
-
-    #Движение игрока влево
+    # Движение игрока влево
     def arrowLeft(self, event):
         if canvas.coords(self.player)[0] > 20:
             canvas.move(self.player, -(basicSize + targetsMargin), 0)
-
 
     # Движение игрока вправо
     def arrowRight(self, event):
@@ -217,11 +208,7 @@ class Space:
 s = Space()
 
 
-
-
-
 s.createTargets()
-
 s.moveTargets()
 
 
